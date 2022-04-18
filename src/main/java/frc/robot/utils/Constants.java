@@ -12,4 +12,16 @@ package frc.robot.utils;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {}
+public final class Constants {
+
+    public static final class ModuleConstants {
+        public static final double wheelDiameter = 0;
+        public static final double driveGearRatio = 0;
+        public static final double turnGearRatio = 0;
+        public static final double driveEncoderToMeter = driveGearRatio * Math.PI * wheelDiameter;
+        public static final double turnEncoderToRadian = turnGearRatio * 2 * Math.PI;
+        public static final double driveEncoderRPMToMeterPerSec = driveEncoderToMeter / 60;
+        public static final double turnEncoderRPMToRadPerSec = turnEncoderToRadian / 60;
+        public static final double PTurn = 0.5;
+    }
+}
