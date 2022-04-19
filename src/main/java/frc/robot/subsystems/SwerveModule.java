@@ -1,28 +1,32 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorTimeBase;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import frc.robot.utils.Constants.ModuleConstants;
+import static frc.robot.utils.Constants.ModuleConstants;
 
 public class SwerveModule {
-    private TalonSRX driveMotor;
-    private TalonSRX turnMotor;
+    private TalonFX driveMotor;
+    private TalonFX turnMotor;
+    private CANSparkMax neoTurn;
     private CANCoder absoluteEncoder;
     
     private PIDController turningPID;
     private CANCoderConfiguration config;
 
-    public SwerveModule(int driveMotorID, int turnMotorID, int canEncoderID, boolean isCancoderReveresed) {
-        driveMotor = new TalonSRX(driveMotorID);
-        turnMotor = new TalonSRX(turnMotorID);
+    public SwerveModule(int driveMotorID, int turnMotorID, int canCoderID, boolean isCancoderReveresed) {
+        driveMotor = new TalonFX(driveMotorID);
+        //turnMotor = new TalonFX(turnMotorID);
+        neoTurn = new CANSparkMax(turnMotorID, MotorType.kBrushless);
 
         config.sensorCoefficient = 2 * Math.PI / 4096.0;
         config.unitString = "rad";
@@ -32,10 +36,10 @@ public class SwerveModule {
         //TODO: should it be signed or unsigned
         config.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180;
 
-        absoluteEncoder = new CANCoder(canEncoderID);
+        absoluteEncoder = new CANCoder(canCoderID);
         absoluteEncoder.configAllSettings(config);
         
-        
+        driveMotor.config_kP(0, .25);
         turningPID = new PIDController(ModuleConstants.PTurn, 0, 0);
         turningPID.enableContinuousInput(-Math.PI, Math.PI);
     }
@@ -45,16 +49,17 @@ public class SwerveModule {
     }
 
     public double getTurnPosition() {
-        return turnMotor.getSelectedSensorPosition();
+        return neoTurn.getEncoder().getPosition();
+        //return turnMotor.getSelectedSensorPosition();
     }
 
     public double getDriveVelocity() {
-        //TODO convert to meters per second
-        return driveMotor.getSelectedSensorVelocity();
+        return driveMotor.getSelectedSensorVelocity() * ModuleConstants.driveEncoderRPMToMeterPerSec;
     }
 
     public double getTurnVelocity() {
-        return turnMotor.getSelectedSensorVelocity();
+        return neoTurn.getEncoder().getVelocity();
+        //return turnMotor.getSelectedSensorVelocity();
     }
 
     public double getAbsoluteTurnPosition() {
@@ -65,6 +70,7 @@ public class SwerveModule {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteTurnPosition()));
     }
 
+    //TODO: normalize drive power values!!(I forgor where we should do this)
     public void setDesiredState(SwerveModuleState state) {
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
             stop();
@@ -72,11 +78,13 @@ public class SwerveModule {
         }
         state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(ControlMode.Velocity, state.speedMetersPerSecond);
-        turnMotor.set(ControlMode.PercentOutput, turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
+        neoTurn.set(turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
+        //turnMotor.set(ControlMode.PercentOutput, turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
     }
 
     public void stop() {
         driveMotor.set(ControlMode.PercentOutput, 0);
-        turnMotor.set(ControlMode.PercentOutput, 0);
+        neoTurn.set(0);
+        //turnMotor.set(ControlMode.PercentOutput, 0);
     }
 }

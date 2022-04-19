@@ -14,6 +14,21 @@ package frc.robot.utils;
  */
 public final class Constants {
 
+    public static final class Ports {
+        public static final int frontRightDrive = 0;
+        public static final int frontRightTurn = 0;
+        public static final int frontRightAbsolute = 0;
+        public static final int frontLeftDrive = 0;
+        public static final int frontLeftTurn = 0;
+        public static final int frontLeftAbsolute = 0;
+        public static final int backRightDrive = 0;
+        public static final int backRightTurn = 0;
+        public static final int backRightAbsolute = 0;
+        public static final int backLeftDrive = 0;
+        public static final int backLeftTurn = 0;
+        public static final int backLeftAbsolute = 0;
+    }
+
     public static final class ModuleConstants {
         public static final double wheelDiameter = 0;
         public static final double driveGearRatio = 0;
