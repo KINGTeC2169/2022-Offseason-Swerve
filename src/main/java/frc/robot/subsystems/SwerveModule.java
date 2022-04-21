@@ -44,6 +44,7 @@ public class SwerveModule {
         turningPID.enableContinuousInput(-Math.PI, Math.PI);
     }
 
+    
     public double getDrivePosition() {
         return driveMotor.getSelectedSensorPosition();
     }
@@ -53,6 +54,7 @@ public class SwerveModule {
         //return turnMotor.getSelectedSensorPosition();
     }
 
+    
     public double getDriveVelocity() {
         return driveMotor.getSelectedSensorVelocity() * ModuleConstants.driveEncoderRPMToMeterPerSec;
     }
@@ -70,7 +72,7 @@ public class SwerveModule {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAbsoluteTurnPosition()));
     }
 
-    //TODO: normalize drive power values!!(I forgor where we should do this)
+    //TODO: normalize drive and turn power values!!(I forgor where we should do this)
     public void setDesiredState(SwerveModuleState state) {
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
             stop();

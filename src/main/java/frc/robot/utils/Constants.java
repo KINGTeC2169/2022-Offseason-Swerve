@@ -4,6 +4,10 @@
 
 package frc.robot.utils;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -15,6 +19,8 @@ package frc.robot.utils;
 public final class Constants {
 
     public static final class Ports {
+        public static final int joystick = 0;
+
         public static final int frontRightDrive = 0;
         public static final int frontRightTurn = 0;
         public static final int frontRightAbsolute = 0;
@@ -27,6 +33,18 @@ public final class Constants {
         public static final int backLeftDrive = 0;
         public static final int backLeftTurn = 0;
         public static final int backLeftAbsolute = 0;
+    }
+
+    public static final class DriveConstants {
+        //These will need to be in meters
+        public static final double rightLeftWheels = 26;
+        public static final double frontBackWheels = 26;
+
+        public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
+                new Translation2d(frontBackWheels / 2, -rightLeftWheels / 2),
+                new Translation2d(frontBackWheels / 2, rightLeftWheels / 2),
+                new Translation2d(-frontBackWheels / 2, -rightLeftWheels / 2),
+                new Translation2d(-frontBackWheels / 2, rightLeftWheels / 2));
     }
 
     public static final class ModuleConstants {
