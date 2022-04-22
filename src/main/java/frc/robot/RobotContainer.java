@@ -30,10 +30,10 @@ public class RobotContainer {
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
           swerveSubsystem,
-          () -> -driverJoystick.getY(),
           () -> driverJoystick.getX(),
+          () -> -driverJoystick.getY(),
           () -> driverJoystick.getTwist(),
-          () -> !driverJoystick.getRawButton(0)));
+          () -> !driverJoystick.getRawButton(13)));
 
     configureButtonBindings();
   }
@@ -45,7 +45,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driverJoystick, 2).whenPressed(() -> swerveSubsystem.zeroHeading());
+    new JoystickButton(driverJoystick, 7).whenPressed(() -> swerveSubsystem.zeroHeading());
   }
 
   /**

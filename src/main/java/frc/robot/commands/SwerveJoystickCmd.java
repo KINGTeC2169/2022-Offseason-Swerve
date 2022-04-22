@@ -9,6 +9,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.utils.Constants.ModuleConstants;
 
 import static frc.robot.utils.Constants.DriveConstants;
 
@@ -39,16 +40,17 @@ public class SwerveJoystickCmd extends CommandBase {
     double ySpeed = ySpdFunction.get();
     double turningSpeed = turningSpdFunction.get();
 
-    /* Deadband: unsure if necessary for our controllers
-    xSpeed = Math.abs(xSpeed) > 1 ? xSpeed : 0.0;
-    ySpeed = Math.abs(ySpeed) > 1 ? ySpeed : 0.0;
-    turningSpeed = Math.abs(turningSpeed) > 1 ? turningSpeed : 0.0;
-    */
+    // Deadband: unsure if necessary for our controllers
+    xSpeed = Math.abs(xSpeed) > .05 ? xSpeed : 0.0;
+    ySpeed = Math.abs(ySpeed) > .05 ? ySpeed : 0.0;
+    turningSpeed = Math.abs(turningSpeed) > .05 ? turningSpeed : 0.0;
+    
 
-    xSpeed = xLimiter.calculate(xSpeed);
-    ySpeed = yLimiter.calculate(ySpeed);
-    turningSpeed = turningLimiter.calculate(turningSpeed);
+    xSpeed = xLimiter.calculate(xSpeed) * ModuleConstants.maxNeoSpeed;
+    ySpeed = yLimiter.calculate(ySpeed) * ModuleConstants.maxNeoSpeed;
+    turningSpeed = turningLimiter.calculate(turningSpeed) * ModuleConstants.maxNeoRadPerSec;
 
+    System.out.println(xSpeed + "\t" + ySpeed + "\t" + turningSpeed);
 
     ChassisSpeeds chassisSpeeds;
     if(fieldOrientedFunction.get()) {
