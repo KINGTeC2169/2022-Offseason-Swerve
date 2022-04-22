@@ -31,11 +31,12 @@ public class SwerveJoystickCmd extends CommandBase {
     this.yLimiter = new SlewRateLimiter(26);
     this.turningLimiter = new SlewRateLimiter(26);
     addRequirements(swerveSubsystem);
+    System.out.println("Make Command");
   }
 
   
   @Override
-  public void initialize() {
+  public void execute() {
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();
     double turningSpeed = turningSpdFunction.get();
@@ -43,17 +44,17 @@ public class SwerveJoystickCmd extends CommandBase {
     // Deadband: unsure if necessary for our controllers
     xSpeed = Math.abs(xSpeed) > .05 ? xSpeed : 0.0;
     ySpeed = Math.abs(ySpeed) > .05 ? ySpeed : 0.0;
-    turningSpeed = Math.abs(turningSpeed) > .05 ? turningSpeed : 0.0;
+    turningSpeed = Math.abs(turningSpeed) > .5 ? turningSpeed : 0.0;
     
 
-    xSpeed = xLimiter.calculate(xSpeed) * ModuleConstants.maxNeoSpeed;
-    ySpeed = yLimiter.calculate(ySpeed) * ModuleConstants.maxNeoSpeed;
+    xSpeed = xLimiter.calculate(xSpeed) *  ModuleConstants.maxNeoSpeed;
+    ySpeed = yLimiter.calculate(ySpeed) *  ModuleConstants.maxNeoSpeed;
     turningSpeed = turningLimiter.calculate(turningSpeed) * ModuleConstants.maxNeoRadPerSec;
 
     System.out.println(xSpeed + "\t" + ySpeed + "\t" + turningSpeed);
 
     ChassisSpeeds chassisSpeeds;
-    if(fieldOrientedFunction.get()) {
+    if(false/*fieldOrientedFunction.get()*/) {
       chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
     }
     else {
@@ -67,7 +68,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
   
   @Override
-  public void execute() {}
+  public void initialize() {}
 
   
   @Override

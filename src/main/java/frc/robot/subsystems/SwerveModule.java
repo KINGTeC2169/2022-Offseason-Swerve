@@ -46,8 +46,8 @@ public class SwerveModule {
         turnEncoder = neoTurn.getEncoder();
 
         //TODO: should it be signed or unsigned
-        //config.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180;
-        configTest.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
+        configTest.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180;
+        //configTest.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
 
         absoluteEncoder = new CANCoder(canCoderID);
         absoluteEncoder.configAllSettings(configTest);
@@ -99,13 +99,13 @@ public class SwerveModule {
 
     //TODO: normalize drive and turn power values!!(I forgor where we should do this)
     public void setDesiredState(SwerveModuleState state) {
-        if (Math.abs(state.speedMetersPerSecond) < 0.001) {
-            stop();
-            return;
-        }
+        //if (Math.abs(state.speedMetersPerSecond) < 0.001) {
+          //  stop();
+            //return;
+        //}
         state = SwerveModuleState.optimize(state, getState().angle);
         //driveMotor.set(ControlMode.Velocity, state.speedMetersPerSecond);
-        driveMotor.set(state.speedMetersPerSecond / ModuleConstants.maxNeoSpeed);
+        //driveMotor.set(state.speedMetersPerSecond / ModuleConstants.maxNeoSpeed);
         neoTurn.set(turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
         //turnMotor.set(ControlMode.PercentOutput, turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
     }

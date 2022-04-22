@@ -43,10 +43,10 @@ public final class Constants {
         public static final double rightLeftWheels = Units.inchesToMeters(21.5);
         public static final double frontBackWheels = Units.inchesToMeters(21.5);
 
-        public static final double FRabsoluteOffset = 0;
-        public static final double FLabsoluteOffset = 0;
-        public static final double BRabsoluteOffset = 0;
-        public static final double BLabsoluteOffset = 0;
+        public static final double FRabsoluteOffset = 5.788;
+        public static final double FLabsoluteOffset = 1.201;
+        public static final double BRabsoluteOffset = 2.008;
+        public static final double BLabsoluteOffset = 6.229;
 
         public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
                 new Translation2d(frontBackWheels / 2, -rightLeftWheels / 2),
@@ -66,6 +66,6 @@ public final class Constants {
         public static final double driveEncoderRPMToMeterPerSec = driveEncoderToMeter / 60;
         public static final double turnEncoderRPMToRadPerSec = turnEncoderToRadian / 60;
 
-        public static final double PTurn = 0.05;
+        public static final double PTurn = 0.5;
     }
 }
