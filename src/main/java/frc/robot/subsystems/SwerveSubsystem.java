@@ -7,28 +7,37 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants.DriveConstants;
+import frc.robot.utils.Constants.ModuleConstants;
 
-import static frc.robot.utils.Constants.Ports;
+import frc.robot.utils.Constants.Ports;
 
 import com.kauailabs.navx.frc.AHRS;
 
 public class SwerveSubsystem extends SubsystemBase {
     
+    private SwerveModule frontLeft = new SwerveModule(
+    Ports.frontLeftDrive,
+    Ports.frontLeftTurn, 
+    true, false,
+    Ports.frontLeftAbsolute,
+    DriveConstants.FLabsoluteOffset,
+    false, false);
+
     private SwerveModule frontRight = new SwerveModule(
     Ports.frontRightDrive,
     Ports.frontRightTurn, 
     false, false,
     Ports.frontRightAbsolute,
     DriveConstants.FRabsoluteOffset,
-    true);
+    false, false);
 
-    private SwerveModule frontLeft = new SwerveModule(
-    Ports.frontLeftDrive,
-    Ports.frontLeftTurn, 
-    false, false,
-    Ports.frontLeftAbsolute,
-    DriveConstants.FLabsoluteOffset,
-    true);
+    private SwerveModule backLeft = new SwerveModule(
+    Ports.backLeftDrive,
+    Ports.backLeftTurn, 
+    true, false,
+    Ports.backLeftAbsolute,
+    DriveConstants.BLabsoluteOffset,
+    false, false);
 
     private SwerveModule backRight = new SwerveModule(
     Ports.backRightDrive,
@@ -36,16 +45,8 @@ public class SwerveSubsystem extends SubsystemBase {
     false, false,
     Ports.backRightAbsolute,
     DriveConstants.BRabsoluteOffset,
-    true);
+    false, true);
     
-    private SwerveModule backLeft = new SwerveModule(
-    Ports.backLeftDrive,
-    Ports.backLeftTurn, 
-    false, false,
-    Ports.backLeftAbsolute,
-    DriveConstants.BLabsoluteOffset,
-    true);
-
     private AHRS gyro = new AHRS(SPI.Port.kMXP);
 
     public SwerveSubsystem() {
@@ -72,6 +73,13 @@ public class SwerveSubsystem extends SubsystemBase {
         return Rotation2d.fromDegrees(getHeading());
     }
 
+    public void resetEncoders() {
+        frontLeft.resetEncoders();
+        frontRight.resetEncoders();
+        backRight.resetEncoders();
+        backLeft.resetEncoders();
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Robot Heading", getHeading());
@@ -79,6 +87,11 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Front Right Absolute", frontRight.getAbsoluteTurnPosition());
         SmartDashboard.putNumber("Back Left Absolute", backLeft.getAbsoluteTurnPosition());
         SmartDashboard.putNumber("Back Right Absolute", backRight.getAbsoluteTurnPosition());
+
+        SmartDashboard.putNumber("Front Left", frontLeft.getTurnPosition());
+        SmartDashboard.putNumber("Front Right", frontRight.getTurnPosition());
+        SmartDashboard.putNumber("Back Left", backLeft.getTurnPosition());
+        SmartDashboard.putNumber("Back Right", backRight.getTurnPosition());
     }
 
     public void stopModules() {
@@ -89,7 +102,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState[] states) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, 5);
+        SwerveDriveKinematics.desaturateWheelSpeeds(states, ModuleConstants.maxNeoSpeed);
         frontLeft.setDesiredState(states[0]);
         frontRight.setDesiredState(states[1]);
         backLeft.setDesiredState(states[2]);

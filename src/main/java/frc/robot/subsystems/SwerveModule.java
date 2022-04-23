@@ -14,8 +14,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-
-import static frc.robot.utils.Constants.ModuleConstants;
+import edu.wpi.first.math.util.Units;
+import frc.robot.utils.Constants.ModuleConstants;
 
 public class SwerveModule {
     //private TalonFX driveMotor;
@@ -26,28 +26,32 @@ public class SwerveModule {
 
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder turnEncoder;
-    
+
     private PIDController turningPID;
     private CANCoderConfiguration configTest = new CANCoderConfiguration();
 
     public SwerveModule(int driveMotorID, int turnMotorID, boolean driveMotorReversed, 
-                boolean turnMotorReversed, int canCoderID, double absoluteOffset, boolean isCancoderReveresed) {
+                boolean turnMotorReversed, int canCoderID, double absoluteOffset, 
+                boolean isCancoderReversed, boolean turnEncoderReversed) {
         //driveMotor = new TalonFX(driveMotorID);
         //turnMotor = new TalonFX(turnMotorID);
         neoTurn = new CANSparkMax(turnMotorID, MotorType.kBrushless);
         driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
+        neoTurn.setInverted(turnMotorReversed);
+        driveMotor.setInverted(driveMotorReversed);
 
+        configTest.magnetOffsetDegrees = Units.radiansToDegrees(absoluteOffset);
         configTest.sensorCoefficient = 2 * Math.PI / 4096.0;
         configTest.unitString = "rad";
+        
         configTest.sensorTimeBase = SensorTimeBase.PerSecond;
-        configTest.sensorDirection = isCancoderReveresed;
+        configTest.sensorDirection = isCancoderReversed;
 
         driveEncoder = driveMotor.getEncoder();
         turnEncoder = neoTurn.getEncoder();
+        //turnEncoder.setInverted(turnEncoderReversed);
 
-        //TODO: should it be signed or unsigned
         configTest.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180;
-        //configTest.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
 
         absoluteEncoder = new CANCoder(canCoderID);
         absoluteEncoder.configAllSettings(configTest);
@@ -60,6 +64,8 @@ public class SwerveModule {
         //driveMotor.config_kP(0, .25);
         turningPID = new PIDController(ModuleConstants.PTurn, 0, 0);
         turningPID.enableContinuousInput(-Math.PI, Math.PI);
+
+        resetEncoders();
     }
 
     
@@ -75,7 +81,7 @@ public class SwerveModule {
 
     
     public double getDriveVelocity() {
-        //return driveMotor.getSelectedSensorVelocity() * ModuleConstants.driveEncoderRPMToMeterPerSec;
+        //return driveMotor.getSelectedSensorVelocity();
         return driveEncoder.getVelocity();
     }
 
@@ -91,21 +97,21 @@ public class SwerveModule {
     public void resetEncoders() {
         driveEncoder.setPosition(0);
         turnEncoder.setPosition(getAbsoluteTurnPosition());
+        System.out.println("RESETTING ENCODERS \n.\n.\n.\n.\n.\n.\n.\n.");
     }
 
     public SwerveModuleState getState() {
         return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurnPosition()));
     }
 
-    //TODO: normalize drive and turn power values!!(I forgor where we should do this)
     public void setDesiredState(SwerveModuleState state) {
-        //if (Math.abs(state.speedMetersPerSecond) < 0.001) {
-          //  stop();
-            //return;
-        //}
+        if (Math.abs(state.speedMetersPerSecond) < 0.001) {
+            stop();
+            return;
+        }
         state = SwerveModuleState.optimize(state, getState().angle);
         //driveMotor.set(ControlMode.Velocity, state.speedMetersPerSecond);
-        //driveMotor.set(state.speedMetersPerSecond / ModuleConstants.maxNeoSpeed);
+        driveMotor.set(state.speedMetersPerSecond / ModuleConstants.maxNeoSpeed);
         neoTurn.set(turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
         //turnMotor.set(ControlMode.PercentOutput, turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
     }

@@ -2,8 +2,6 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 
-import com.ctre.phoenix.sensors.CANCoder;
-
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -11,7 +9,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.Constants.ModuleConstants;
 
-import static frc.robot.utils.Constants.DriveConstants;
+import frc.robot.utils.Constants.DriveConstants;
+import static frc.robot.utils.Constants.*;
 
 public class SwerveJoystickCmd extends CommandBase {
 
@@ -31,9 +30,10 @@ public class SwerveJoystickCmd extends CommandBase {
     this.yLimiter = new SlewRateLimiter(26);
     this.turningLimiter = new SlewRateLimiter(26);
     addRequirements(swerveSubsystem);
-    System.out.println("Make Command");
   }
 
+  @Override
+  public void initialize() {}
   
   @Override
   public void execute() {
@@ -44,7 +44,7 @@ public class SwerveJoystickCmd extends CommandBase {
     // Deadband: unsure if necessary for our controllers
     xSpeed = Math.abs(xSpeed) > .05 ? xSpeed : 0.0;
     ySpeed = Math.abs(ySpeed) > .05 ? ySpeed : 0.0;
-    turningSpeed = Math.abs(turningSpeed) > .5 ? turningSpeed : 0.0;
+    turningSpeed = Math.abs(turningSpeed) > .05 ? turningSpeed : 0.0;
     
 
     xSpeed = xLimiter.calculate(xSpeed) *  ModuleConstants.maxNeoSpeed;
@@ -54,7 +54,7 @@ public class SwerveJoystickCmd extends CommandBase {
     System.out.println(xSpeed + "\t" + ySpeed + "\t" + turningSpeed);
 
     ChassisSpeeds chassisSpeeds;
-    if(false/*fieldOrientedFunction.get()*/) {
+    if(True/*fieldOrientedFunction.get()*/) {
       chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
     }
     else {
@@ -64,12 +64,10 @@ public class SwerveJoystickCmd extends CommandBase {
     SwerveModuleState[] moduleStates = DriveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
 
     swerveSubsystem.setModuleStates(moduleStates);
+
   }
 
   
-  @Override
-  public void initialize() {}
-
   
   @Override
   public void end(boolean interrupted) {

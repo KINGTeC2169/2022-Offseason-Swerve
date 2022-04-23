@@ -47,7 +47,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(controller, 7).whenPressed(() -> swerveSubsystem.zeroHeading());
+    //new JoystickButton(controller, 2).whenPressed(() -> swerveSubsystem.zeroHeading());
+    new JoystickButton(controller, 3).whenPressed(() -> swerveSubsystem.resetEncoders());
+
+    //new Button(controller.getBButtonPressed()).whenPressed(() -> swerveSubsystem.resetEncoders());
+    
   }
 
   /**

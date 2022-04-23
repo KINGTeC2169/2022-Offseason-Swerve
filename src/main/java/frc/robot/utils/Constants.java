@@ -43,16 +43,16 @@ public final class Constants {
         public static final double rightLeftWheels = Units.inchesToMeters(21.5);
         public static final double frontBackWheels = Units.inchesToMeters(21.5);
 
-        public static final double FRabsoluteOffset = 5.788;
-        public static final double FLabsoluteOffset = 1.201;
-        public static final double BRabsoluteOffset = 2.008;
-        public static final double BLabsoluteOffset = 6.229;
+        public static final double FRabsoluteOffset = -1.032;
+        public static final double FLabsoluteOffset = -0.370;
+        public static final double BRabsoluteOffset = 0.414;
+        public static final double BLabsoluteOffset = -0.357;
 
         public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
-                new Translation2d(frontBackWheels / 2, -rightLeftWheels / 2),
-                new Translation2d(frontBackWheels / 2, rightLeftWheels / 2),
-                new Translation2d(-frontBackWheels / 2, -rightLeftWheels / 2),
-                new Translation2d(-frontBackWheels / 2, rightLeftWheels / 2));
+                new Translation2d(frontBackWheels / 2, rightLeftWheels / 2),//Front-Left
+                new Translation2d(frontBackWheels / 2, -rightLeftWheels / 2),//Front-Right
+                new Translation2d(-frontBackWheels / 2, rightLeftWheels / 2),//Back-Left
+                new Translation2d(-frontBackWheels / 2, -rightLeftWheels / 2));//Back-Right
     }
 
     public static final class ModuleConstants {
