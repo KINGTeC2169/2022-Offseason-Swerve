@@ -109,5 +109,12 @@ public class SwerveSubsystem extends SubsystemBase {
         backRight.setDesiredState(states[3]);
     }
 
+    public void setActiveStop() {
+        frontLeft.activeStop(-1);
+        frontRight.activeStop(1);
+        backLeft.activeStop(1);
+        backRight.activeStop(-1);
+    }
+
 
 }

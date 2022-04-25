@@ -57,6 +57,7 @@ public final class Constants {
 
     public static final class ModuleConstants {
         public static final double maxNeoSpeed = 3.68808;
+        public static final double maxSpeed = 4.14528;
         public static final double maxNeoRadPerSec = 2 * 2 * Math.PI;
         public static final double wheelDiameter = Units.inchesToMeters(4.0);
         public static final double driveGearRatio = 1 / 8.16;

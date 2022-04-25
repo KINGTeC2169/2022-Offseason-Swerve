@@ -27,6 +27,7 @@ public class SwerveModule {
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder turnEncoder;
 
+    private PIDController drivePID;
     private PIDController turningPID;
     private CANCoderConfiguration configTest = new CANCoderConfiguration();
 
@@ -64,6 +65,8 @@ public class SwerveModule {
         //driveMotor.config_kP(0, .25);
         turningPID = new PIDController(ModuleConstants.PTurn, 0, 0);
         turningPID.enableContinuousInput(-Math.PI, Math.PI);
+
+        drivePID = new PIDController(.5, 0, 0);
 
         resetEncoders();
     }
@@ -106,11 +109,11 @@ public class SwerveModule {
 
     public void setDesiredState(SwerveModuleState state) {
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
-            stop();
+            semiAutoStop();
             return;
         }
         state = SwerveModuleState.optimize(state, getState().angle);
-        //driveMotor.set(ControlMode.Velocity, state.speedMetersPerSecond);
+        //driveMotor.set(ControlMode.PercentOutput, state.speedMetersPerSecond / ModuleConstants.maxSpeed);
         driveMotor.set(state.speedMetersPerSecond / ModuleConstants.maxNeoSpeed);
         neoTurn.set(turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
         //turnMotor.set(ControlMode.PercentOutput, turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
@@ -120,5 +123,17 @@ public class SwerveModule {
         driveMotor.set(0);
         neoTurn.set(0);
         //turnMotor.set(ControlMode.PercentOutput, 0);
+    }
+
+    public void semiAutoStop() {
+        driveMotor.set(drivePID.calculate(getDriveVelocity(), 0));
+        neoTurn.set(0);
+    }
+
+    public void activeStop(int direction) {
+        SwerveModuleState state = new SwerveModuleState(0, new Rotation2d(0.785398 * direction));
+        state = SwerveModuleState.optimize(state, getState().angle);
+        driveMotor.set(drivePID.calculate(getDriveVelocity(), 0));
+        neoTurn.set(turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
     }
 }

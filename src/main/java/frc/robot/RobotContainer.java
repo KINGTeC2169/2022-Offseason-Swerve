@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -49,9 +48,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     //new JoystickButton(controller, 2).whenPressed(() -> swerveSubsystem.zeroHeading());
     new JoystickButton(controller, 3).whenPressed(() -> swerveSubsystem.resetEncoders());
-
-    //new Button(controller.getBButtonPressed()).whenPressed(() -> swerveSubsystem.resetEncoders());
-    
+    new JoystickButton(controller, 2).whenPressed(() -> swerveSubsystem.setActiveStop());
   }
 
   /**
@@ -60,7 +57,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
     return null;
   }
 }
