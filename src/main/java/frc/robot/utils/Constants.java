@@ -22,7 +22,8 @@ public final class Constants {
     public static final boolean False = true;
 
     public static final class Ports {
-        public static final int joystick = 0;
+        public static final int controller = 0;
+        public static final int joystick = 1;
 
         public static final int frontRightDrive = 8;
         public static final int frontRightTurn = 7;
@@ -45,7 +46,7 @@ public final class Constants {
 
         public static final double FRabsoluteOffset = -1.032;
         public static final double FLabsoluteOffset = -0.370;
-        public static final double BRabsoluteOffset = 0.414;
+        public static final double BRabsoluteOffset = -0.434;
         public static final double BLabsoluteOffset = -0.357;
 
         public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
@@ -59,7 +60,7 @@ public final class Constants {
         public static final double maxNeoSpeed = 3.68808;
         public static final double maxSpeed = 4.14528;
         public static final double maxNeoRadPerSec = 2 * 2 * Math.PI;
-        public static final double wheelDiameter = Units.inchesToMeters(4.0);
+        public static final double wheelDiameter = 0.1016;//Units.inchesToMeters(4.0);
         public static final double driveGearRatio = 1 / 8.16;
         public static final double turnGearRatio = 1 / 12.8;
         public static final double driveEncoderToMeter = driveGearRatio * Math.PI * wheelDiameter;
@@ -68,5 +69,6 @@ public final class Constants {
         public static final double turnEncoderRPMToRadPerSec = turnEncoderToRadian / 60;
 
         public static final double PTurn = 0.5;
+        public static final double PDrive = 0.3;
     }
 }
