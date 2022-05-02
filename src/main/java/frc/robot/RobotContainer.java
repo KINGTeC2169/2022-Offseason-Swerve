@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -24,17 +20,23 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
-  //private final Joystick driverJoystick = new Joystick(Ports.joystick);
-  private final XboxController controller = new XboxController(Ports.joystick);
+  private final Joystick driverJoystick = new Joystick(Ports.joystick);
+  private final XboxController controller = new XboxController(Ports.controller);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
           swerveSubsystem,
-          () -> controller.getLeftY(),
-          () -> controller.getLeftX(),
+          //() -> controller.getLeftY(),
+          //() -> controller.getLeftX(),
           () -> controller.getRightX(),
-          () -> !controller.getAButtonPressed()));
+          () -> controller.getRawButton(1),
+          () -> controller.getRawButton(2),
+          () -> controller.getRawButton(3),
+          () -> controller.getRawButton(4),
+          () -> controller.getRawButton(5),
+          () -> controller.getPOV()
+          ));
 
     configureButtonBindings();
   }
@@ -46,9 +48,10 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //new JoystickButton(controller, 2).whenPressed(() -> swerveSubsystem.zeroHeading());
-    new JoystickButton(controller, 3).whenPressed(() -> swerveSubsystem.resetEncoders());
-    new JoystickButton(controller, 2).whenPressed(() -> swerveSubsystem.setActiveStop());
+    //BUTTON NUMBERS START AT 1
+    new JoystickButton(controller, 7).whenPressed(() -> swerveSubsystem.resetEncoders());
+    new JoystickButton(controller, 8).whenPressed(() -> swerveSubsystem.zeroHeading());
+    //new JoystickButton(controller, 9).whenPressed(() -> swerveSubsystem.setActiveStop());
   }
 
   /**
