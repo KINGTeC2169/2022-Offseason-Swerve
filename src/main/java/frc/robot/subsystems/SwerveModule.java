@@ -15,7 +15,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import frc.robot.utils.Constants.ModuleConstants;
+import static frc.robot.utils.Constants.ModuleConstants.*;
 
 public class SwerveModule {
     //private TalonFX driveMotor;
@@ -33,64 +33,68 @@ public class SwerveModule {
 
     public SwerveModule(int driveMotorID, int turnMotorID, boolean driveMotorReversed, 
                 boolean turnMotorReversed, int canCoderID, double absoluteOffset, 
-                boolean isCancoderReversed, boolean turnEncoderReversed) {
-        //driveMotor = new TalonFX(driveMotorID);
-        //turnMotor = new TalonFX(turnMotorID);
+                boolean isCancoderReversed) {
+
+        //Creates and configures motors
         neoTurn = new CANSparkMax(turnMotorID, MotorType.kBrushless);
         driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
         neoTurn.setInverted(turnMotorReversed);
         driveMotor.setInverted(driveMotorReversed);
+        //>driveMotor = new TalonFX(driveMotorID);
+        //>turnMotor = new TalonFX(turnMotorID);
+        //>driveMotor.setInverted(driveMotorReversed);
+        //>turnMotor.setInverted(turnMotorReversed);
 
+        //Configuration for CANCoder
         configTest.magnetOffsetDegrees = Units.radiansToDegrees(absoluteOffset);
         configTest.sensorCoefficient = 2 * Math.PI / 4096.0;
         configTest.unitString = "rad";
-        
         configTest.sensorTimeBase = SensorTimeBase.PerSecond;
         configTest.sensorDirection = isCancoderReversed;
-
-        driveEncoder = driveMotor.getEncoder();
-        turnEncoder = neoTurn.getEncoder();
-        //turnEncoder.setInverted(turnEncoderReversed);
-
         configTest.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180;
 
         absoluteEncoder = new CANCoder(canCoderID);
         absoluteEncoder.configAllSettings(configTest);
-        
-        driveEncoder.setPositionConversionFactor(ModuleConstants.driveEncoderToMeter);
-        driveEncoder.setVelocityConversionFactor(ModuleConstants.driveEncoderRPMToMeterPerSec);
-        turnEncoder.setPositionConversionFactor(ModuleConstants.turnEncoderToRadian);
-        turnEncoder.setVelocityConversionFactor(ModuleConstants.turnEncoderRPMToRadPerSec);
 
-        //driveMotor.config_kP(0, .25);
-        turningPID = new PIDController(ModuleConstants.PTurn, 0, 0);
+        //Configures integrated motor encoders
+        driveEncoder = driveMotor.getEncoder();
+        turnEncoder = neoTurn.getEncoder();
+
+        driveEncoder.setPositionConversionFactor(driveEncoderToMeter);
+        driveEncoder.setVelocityConversionFactor(driveEncoderRPMToMeterPerSec);
+        turnEncoder.setPositionConversionFactor(turnEncoderToRadian);
+        turnEncoder.setVelocityConversionFactor(turnEncoderRPMToRadPerSec);
+
+        //Creating and configuring PID controllers
+        turningPID = new PIDController(PTurn, 0, 0);
         turningPID.enableContinuousInput(-Math.PI, Math.PI);
 
-        drivePID = new PIDController(.5, 0, 0);
+        //driveMotor.config_kP(0, .25);
+        drivePID = new PIDController(PDrive, 0, 0);
 
         resetEncoders();
     }
 
     
     public double getDrivePosition() {
-        //return driveMotor.getSelectedSensorPosition();
+        //>return driveMotor.getSelectedSensorPosition();
         return driveEncoder.getPosition();
     }
 
     public double getTurnPosition() {
         return turnEncoder.getPosition();
-        //return turnMotor.getSelectedSensorPosition();
+        //>return turnMotor.getSelectedSensorPosition();
     }
 
     
     public double getDriveVelocity() {
-        //return driveMotor.getSelectedSensorVelocity();
+        //>return driveMotor.getSelectedSensorVelocity();
         return driveEncoder.getVelocity();
     }
 
     public double getTurnVelocity() {
         return turnEncoder.getVelocity();
-        //return turnMotor.getSelectedSensorVelocity();
+        //>return turnMotor.getSelectedSensorVelocity();
     }
 
     public double getAbsoluteTurnPosition() {
@@ -113,27 +117,32 @@ public class SwerveModule {
             return;
         }
         state = SwerveModuleState.optimize(state, getState().angle);
-        //driveMotor.set(ControlMode.PercentOutput, state.speedMetersPerSecond / ModuleConstants.maxSpeed);
-        driveMotor.set(state.speedMetersPerSecond / ModuleConstants.maxNeoSpeed);
+        //>driveMotor.set(ControlMode.PercentOutput, state.speedMetersPerSecond / maxSpeed);
+        driveMotor.set(state.speedMetersPerSecond / maxNeoSpeed);
         neoTurn.set(turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
-        //turnMotor.set(ControlMode.PercentOutput, turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
+        //>turnMotor.set(ControlMode.PercentOutput, turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
     }
 
     public void stop() {
         driveMotor.set(0);
         neoTurn.set(0);
-        //turnMotor.set(ControlMode.PercentOutput, 0);
+        //>turnMotor.set(ControlMode.PercentOutput, 0);
     }
 
     public void semiAutoStop() {
         driveMotor.set(drivePID.calculate(getDriveVelocity(), 0));
         neoTurn.set(0);
+        //>driveMotor.set(ControlMode.PercentOutput, drivePID.calculate(getDriveVelocity(), 0));
+        //>turnMotor.set(ControlMode.PercentOut, 0);
     }
 
     public void activeStop(int direction) {
+        System.out.println("2\n2\n2\n2\n2\n2\n2\n2");
         SwerveModuleState state = new SwerveModuleState(0, new Rotation2d(0.785398 * direction));
         state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(drivePID.calculate(getDriveVelocity(), 0));
         neoTurn.set(turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
+        //>driveMotor.set(ControlMode.PercentOutput, drivePID.calculate(getDriveVelocity(), 0));
+        //>turnMotor.set(ControlMode.PercentOutput, turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
     }
 }
