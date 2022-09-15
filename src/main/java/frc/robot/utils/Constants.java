@@ -37,6 +37,14 @@ public final class Constants {
         public static final int backLeftDrive = 4;
         public static final int backLeftTurn = 3;
         public static final int backLeftAbsolute = 9;
+
+        public static final int cannon1 = 1;
+        public static final int cannon2 = 2;
+        public static final int cannon3 = 3;
+        public static final int cannon4 = 4;
+        public static final int cannon5 = 5;
+        public static final int cannon6 = 6;
+
     }
 
     public static final class DriveConstants {

@@ -34,7 +34,14 @@ public class RobotContainer {
           () -> controller.getLeftY(),
           () -> controller.getLeftX(),
           () -> controller.getRightX(),
-          () -> !controller.getAButtonPressed()));
+          () -> !controller.getAButtonPressed(), 
+          () -> controller.getYButton(),
+          () -> controller.getBButton(),
+          () -> controller.getAButton(),
+          () -> controller.getXButton(),
+          () -> controller.getLeftBumper(),
+          () -> controller.getRightBumper())
+          );
 
     configureButtonBindings();
   }
@@ -46,9 +53,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //new JoystickButton(controller, 2).whenPressed(() -> swerveSubsystem.zeroHeading());
-    new JoystickButton(controller, 3).whenPressed(() -> swerveSubsystem.resetEncoders());
-    new JoystickButton(controller, 2).whenPressed(() -> swerveSubsystem.setActiveStop());
+    new JoystickButton(controller, 7).whenPressed(() -> swerveSubsystem.zeroHeading());
+    new JoystickButton(controller, 8).whenPressed(() -> swerveSubsystem.resetEncoders());
+    //new JoystickButton(controller, 2).whenPressed(() -> swerveSubsystem.setActiveStop());
   }
 
   /**
