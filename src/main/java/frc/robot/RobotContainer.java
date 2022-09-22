@@ -55,7 +55,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     new JoystickButton(controller, 7).whenPressed(() -> swerveSubsystem.zeroHeading());
     new JoystickButton(controller, 8).whenPressed(() -> swerveSubsystem.resetEncoders());
-    //new JoystickButton(controller, 2).whenPressed(() -> swerveSubsystem.setActiveStop());
+    //new JoystickButton(controller, 2).whileActiveContinuous(() -> swerveSubsystem.setActiveStop());
   }
 
   /**

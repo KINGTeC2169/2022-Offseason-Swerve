@@ -104,7 +104,7 @@ public class SwerveModule {
     public void resetEncoders() {
         driveEncoder.setPosition(0);
         turnEncoder.setPosition(getAbsoluteTurnPosition());
-        System.out.println("RESETTING ENCODERS \n.\n.\n.\n.\n.\n.\n.\n.");
+        System.out.println("RESETTING ENCODERS \nRESETTING ENCODERS\nRESETTING ENCODERS\nRESETTING ENCODERS\nRESETTING ENCODERS\nRESETTING ENCODERS\nRESETTING ENCODERS\nRESETTING ENCODERS\nRESETTING ENCODERS");
     }
 
     public SwerveModuleState getState() {
@@ -113,6 +113,7 @@ public class SwerveModule {
 
     public void setDesiredState(SwerveModuleState state) {
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
+            //TODO: this causes an aggresive stop, need to test with more weight on bot
             semiAutoStop();
             return;
         }
@@ -129,6 +130,9 @@ public class SwerveModule {
         //>turnMotor.set(ControlMode.PercentOutput, 0);
     }
 
+    /**
+     * Uses a PID to set drive velocity to 0
+     */
     public void semiAutoStop() {
         driveMotor.set(drivePID.calculate(getDriveVelocity(), 0));
         neoTurn.set(0);
@@ -136,6 +140,9 @@ public class SwerveModule {
         //>turnMotor.set(ControlMode.PercentOut, 0);
     }
 
+    /**
+     * Sets wheels to X formation
+     */
     public void activeStop(int direction) {
         System.out.println("2\n2\n2\n2\n2\n2\n2\n2");
         SwerveModuleState state = new SwerveModuleState(0, new Rotation2d(0.785398 * direction));
