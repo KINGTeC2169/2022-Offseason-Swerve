@@ -43,9 +43,9 @@ public class SwerveJoystickCmd extends CommandBase {
     this.valveFour = valveFour;
     this.valveFive = valveFive;
     this.valveSix = valveSix;
-    this.xLimiter = new SlewRateLimiter(26);
-    this.yLimiter = new SlewRateLimiter(26);
-    this.turningLimiter = new SlewRateLimiter(26);
+    this.xLimiter = new SlewRateLimiter(5);
+    this.yLimiter = new SlewRateLimiter(5);
+    this.turningLimiter = new SlewRateLimiter(5);
     addRequirements(swerveSubsystem);
   }
 
@@ -60,9 +60,9 @@ public class SwerveJoystickCmd extends CommandBase {
     double turningSpeed = turningSpdFunction.get();
 
     // Deadband: unsure if necessary for our controllers
-    xSpeed = Math.abs(xSpeed) > .02 ? xSpeed : 0.0;
-    ySpeed = Math.abs(ySpeed) > .02 ? ySpeed : 0.0;
-    turningSpeed = Math.abs(turningSpeed) > .05 ? turningSpeed : 0.0;
+    xSpeed = Math.abs(xSpeed) > .05 ? xSpeed : 0.0;
+    ySpeed = Math.abs(ySpeed) > .05 ? ySpeed : 0.0;
+    turningSpeed = Math.abs(turningSpeed) > .02 ? turningSpeed : 0.0;
     
 
     xSpeed = xLimiter.calculate(xSpeed) *  ModuleConstants.maxNeoSpeed;
