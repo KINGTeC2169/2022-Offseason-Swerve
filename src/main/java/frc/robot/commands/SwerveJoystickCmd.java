@@ -23,16 +23,16 @@ public class SwerveJoystickCmd extends CommandBase {
   private final Solenoid valve5 = new Solenoid(PneumaticsModuleType.CTREPCM, Ports.cannon5);
   private final Solenoid valve6 = new Solenoid(PneumaticsModuleType.CTREPCM, Ports.cannon6);
 
-  private final SwerveSubsystem swerveSubsystem;
+  private final SwerveSubsystem swerveSubsystem; //TODO: TankDrive vars
   private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
   private final Supplier<Boolean> fieldOrientedFunction, valveOne, valveTwo, valveThree, valveFour, valveFive, valveSix;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
-  public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem, Supplier<Double> xSpdFunction, 
+  public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem /*TODO: TankDrive */, Supplier<Double> xSpdFunction, 
       Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> fieldOrientedFunction, 
       Supplier<Boolean> valveOne, Supplier<Boolean> valveTwo, Supplier<Boolean> valveThree,
       Supplier<Boolean> valveFour, Supplier<Boolean> valveFive, Supplier<Boolean> valveSix) {
-    this.swerveSubsystem = swerveSubsystem;
+    this.swerveSubsystem = swerveSubsystem; //TODO: TankDrive
     this.xSpdFunction = xSpdFunction;
     this.ySpdFunction = ySpdFunction;
     this.turningSpdFunction = turningSpdFunction;
