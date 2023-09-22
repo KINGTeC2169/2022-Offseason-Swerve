@@ -28,14 +28,14 @@ public final class Constants {
         public static final int frontRightDrive = 8;
         public static final int frontRightTurn = 7;
         public static final int frontRightAbsolute = 12;
-        public static final int frontLeftDrive = 2;
-        public static final int frontLeftTurn = 1;
+        public static final int frontLeftDrive = 4;
+        public static final int frontLeftTurn = 3;
         public static final int frontLeftAbsolute = 11;
         public static final int backRightDrive = 6;
         public static final int backRightTurn = 5;
         public static final int backRightAbsolute = 10;
-        public static final int backLeftDrive = 4;
-        public static final int backLeftTurn = 3;
+        public static final int backLeftDrive = 1;
+        public static final int backLeftTurn = 2;
         public static final int backLeftAbsolute = 9;
 
         public static final int cannon1 = 1;
