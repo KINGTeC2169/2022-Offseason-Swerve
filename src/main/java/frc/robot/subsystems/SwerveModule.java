@@ -31,7 +31,7 @@ public class SwerveModule {
 
     public SwerveModule(int driveMotorID, int turnMotorID, boolean driveMotorReversed, 
                 boolean turnMotorReversed, int canCoderID, double absoluteOffset, 
-                boolean isCancoderReversed) {
+                boolean isCancoderReversed, boolean isMK3) {
 
         //Creates and configures motors
         neoTurn = new CANSparkMax(turnMotorID, MotorType.kBrushless);
@@ -57,9 +57,16 @@ public class SwerveModule {
         //Configures integrated motor encoders
         driveEncoder = driveMotor.getEncoder();
         turnEncoder = neoTurn.getEncoder();
+        if (isMK3) {
+            driveEncoder.setPositionConversionFactor(mk3DriveEncoderToMeter);
+            driveEncoder.setVelocityConversionFactor(mk3DriveEncoderRPMToMeterPerSec);
+        }
 
-        driveEncoder.setPositionConversionFactor(driveEncoderToMeter);
-        driveEncoder.setVelocityConversionFactor(driveEncoderRPMToMeterPerSec);
+        else{
+            driveEncoder.setPositionConversionFactor(mk4DriveEncoderToMeter);
+            driveEncoder.setVelocityConversionFactor(mk4DriveEncoderRPMToMeterPerSec);
+        }
+
         turnEncoder.setPositionConversionFactor(turnEncoderToRadian);
         turnEncoder.setVelocityConversionFactor(turnEncoderRPMToRadPerSec);
 
@@ -96,7 +103,8 @@ public class SwerveModule {
     }
 
     public double getAbsoluteTurnPosition() {
-        return absoluteEncoder.getAbsolutePosition();
+        //return absoluteEncoder.getAbsolutePosition();
+        return 0; 
     }
 
     public void resetEncoders() {

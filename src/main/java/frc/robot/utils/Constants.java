@@ -52,10 +52,10 @@ public final class Constants {
         public static final double rightLeftWheels = Units.inchesToMeters(21.5);
         public static final double frontBackWheels = Units.inchesToMeters(21.5);
 
-        public static final double FRabsoluteOffset = -1.032;
-        public static final double FLabsoluteOffset = -0.370;
-        public static final double BRabsoluteOffset = -0.434;
-        public static final double BLabsoluteOffset = -0.357;
+        public static final double FRabsoluteOffset = 1.365240141749382;
+        public static final double FLabsoluteOffset = -0.424911819398403;
+        public static final double BRabsoluteOffset = 0;
+        public static final double BLabsoluteOffset = 1.55;
 
         public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
                 new Translation2d(frontBackWheels / 2, rightLeftWheels / 2),//Front-Left
@@ -67,13 +67,16 @@ public final class Constants {
     public static final class ModuleConstants {
         public static final double maxNeoSpeed = 3.68808;
         public static final double maxSpeed = 4.14528;
-        public static final double maxNeoRadPerSec = 2 * 2 * Math.PI;
+        public static final double maxNeoRadPerSec = 2 * 2 * Math.PI;   
         public static final double wheelDiameter = 0.1016;//Units.inchesToMeters(4.0);
-        public static final double driveGearRatio = 1 / 8.16;
+        public static final double mk4DriveGearRatio = 1 / 6.75;
+        public static final double mk3DriveGearRatio = 1 / 6.85; //8.16;
         public static final double turnGearRatio = 1 / 12.8;
-        public static final double driveEncoderToMeter = driveGearRatio * Math.PI * wheelDiameter;
+        public static final double mk3DriveEncoderToMeter = mk3DriveGearRatio * Math.PI * wheelDiameter;
+        public static final double mk4DriveEncoderToMeter = mk4DriveGearRatio * Math.PI * wheelDiameter;
         public static final double turnEncoderToRadian = turnGearRatio * 2 * Math.PI;
-        public static final double driveEncoderRPMToMeterPerSec = driveEncoderToMeter / 60;
+        public static final double mk3DriveEncoderRPMToMeterPerSec = mk3DriveEncoderToMeter / 60;
+        public static final double mk4DriveEncoderRPMToMeterPerSec = mk4DriveEncoderToMeter / 60;
         public static final double turnEncoderRPMToRadPerSec = turnEncoderToRadian / 60;
 
         public static final double PTurn = 0.5;

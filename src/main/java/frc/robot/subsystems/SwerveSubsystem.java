@@ -22,7 +22,7 @@ public class SwerveSubsystem extends SubsystemBase {
     true, false,
     Ports.frontLeftAbsolute,
     DriveConstants.FLabsoluteOffset,
-    false);
+    false, false);
 
     private SwerveModule frontRight = new SwerveModule(
     Ports.frontRightDrive,
@@ -30,7 +30,7 @@ public class SwerveSubsystem extends SubsystemBase {
     false, false,
     Ports.frontRightAbsolute,
     DriveConstants.FRabsoluteOffset,
-    false);
+    false, true);
 
     private SwerveModule backLeft = new SwerveModule(
     Ports.backLeftDrive,
@@ -38,7 +38,7 @@ public class SwerveSubsystem extends SubsystemBase {
     true, false,
     Ports.backLeftAbsolute,
     DriveConstants.BLabsoluteOffset,
-    false);
+    false, false);
 
     private SwerveModule backRight = new SwerveModule(
     Ports.backRightDrive,
@@ -46,7 +46,7 @@ public class SwerveSubsystem extends SubsystemBase {
     false, false,
     Ports.backRightAbsolute,
     DriveConstants.BRabsoluteOffset,
-    false);
+    false, true);
     
     //Creates an AHRS object to get inputs from the navX
     private AHRS gyro = new AHRS(SPI.Port.kMXP);
@@ -59,6 +59,14 @@ public class SwerveSubsystem extends SubsystemBase {
             try {
                 Thread.sleep(1000);
                 zeroHeading();
+            } catch (Exception e) {
+            }
+        }).start();
+        
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                resetEncoders();
             } catch (Exception e) {
             }
         }).start();

@@ -25,18 +25,19 @@ public class SwerveJoystickCmd extends CommandBase {
 
   private final SwerveSubsystem swerveSubsystem;
   private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-  private final Supplier<Boolean> fieldOrientedFunction, valveOne, valveTwo, valveThree, valveFour, valveFive, valveSix;
+  private final Supplier<Boolean> fieldOrientedFunction, reset, valveOne, valveTwo, valveThree, valveFour, valveFive, valveSix;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
   public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem, Supplier<Double> xSpdFunction, 
       Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction, Supplier<Boolean> fieldOrientedFunction, 
-      Supplier<Boolean> valveOne, Supplier<Boolean> valveTwo, Supplier<Boolean> valveThree,
+      Supplier<Boolean> reset, Supplier<Boolean> valveOne, Supplier<Boolean> valveTwo, Supplier<Boolean> valveThree,
       Supplier<Boolean> valveFour, Supplier<Boolean> valveFive, Supplier<Boolean> valveSix) {
     this.swerveSubsystem = swerveSubsystem;
     this.xSpdFunction = xSpdFunction;
     this.ySpdFunction = ySpdFunction;
     this.turningSpdFunction = turningSpdFunction;
     this.fieldOrientedFunction = fieldOrientedFunction;
+    this.reset = reset;
     this.valveOne = valveOne;
     this.valveTwo = valveTwo;
     this.valveThree = valveThree;
@@ -55,9 +56,34 @@ public class SwerveJoystickCmd extends CommandBase {
   
   @Override
   public void execute() {
-    double xSpeed = xSpdFunction.get();
-    double ySpeed = ySpdFunction.get();
-    double turningSpeed = turningSpdFunction.get();
+
+    double xSpeed;
+    double ySpeed;
+    double turningSpeed;
+
+    if (Math.abs(xSpdFunction.get()) > 0.05){
+      xSpeed = xSpdFunction.get() * -0.55;
+    }
+
+    else{
+      xSpeed = 0;
+    }
+
+    if (Math.abs(ySpdFunction.get()) > 0.05){
+      ySpeed = ySpdFunction.get() * -0.55;
+    }
+
+    else{
+      ySpeed = 0;
+    }
+
+    if (Math.abs(turningSpdFunction.get()) > 0.05){
+      turningSpeed = turningSpdFunction.get() * -0.4;
+    }
+
+    else{
+      turningSpeed = 0;
+    }
 
     // Deadband: unsure if necessary for our controllers
     xSpeed = Math.abs(xSpeed) > .05 ? xSpeed : 0.0;
@@ -71,11 +97,18 @@ public class SwerveJoystickCmd extends CommandBase {
 
     System.out.println(xSpeed + "\t" + ySpeed + "\t" + turningSpeed);
 
+    if (reset.get()){
+      swerveSubsystem.resetEncoders();
+      swerveSubsystem.zeroHeading();
+    }
+
     ChassisSpeeds chassisSpeeds;
-    if(False/*fieldOrientedFunction.get()*/) {
+    if(True/*fieldOrientedFunction.get()*/) {
+      //Field oriented mode
       chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
     }
     else {
+      //Robot oriented mode
       chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turningSpeed);
     }
 
