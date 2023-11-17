@@ -44,7 +44,7 @@ public class SwerveModule {
         //>turnMotor.setInverted(turnMotorReversed);
 
         //Configuration for CANCoder
-        configTest.magnetOffsetDegrees = Units.radiansToDegrees(absoluteOffset);
+        configTest.magnetOffsetDegrees = Units.radiansToDegrees(absoluteOffset);    
         configTest.sensorCoefficient = 2 * Math.PI / 4096.0;
         configTest.unitString = "rad";
         configTest.sensorTimeBase = SensorTimeBase.PerSecond;
@@ -103,8 +103,8 @@ public class SwerveModule {
     }
 
     public double getAbsoluteTurnPosition() {
-        //return absoluteEncoder.getAbsolutePosition();
-        return 0; 
+        return absoluteEncoder.getAbsolutePosition();
+        //return 0; 
     }
 
     public void resetEncoders() {

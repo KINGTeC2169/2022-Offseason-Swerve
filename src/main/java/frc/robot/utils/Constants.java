@@ -27,7 +27,7 @@ public final class Constants {
 
         public static final int frontRightDrive = 8;
         public static final int frontRightTurn = 7;
-        public static final int frontRightAbsolute = 12;
+        public static final int frontRightAbsolute = 12; 
         public static final int frontLeftDrive = 4;
         public static final int frontLeftTurn = 3;
         public static final int frontLeftAbsolute = 11;
@@ -52,10 +52,10 @@ public final class Constants {
         public static final double rightLeftWheels = Units.inchesToMeters(21.5);
         public static final double frontBackWheels = Units.inchesToMeters(21.5);
 
-        public static final double FRabsoluteOffset = 1.365240141749382;
-        public static final double FLabsoluteOffset = -0.424911819398403;
-        public static final double BRabsoluteOffset = 0;
-        public static final double BLabsoluteOffset = 1.55;
+        public static final double FRabsoluteOffset = -1.842307202517986;//-1.849977090954781;
+        public static final double FLabsoluteOffset = 0.998619474470615;//-1.402230476438999;
+        public static final double BRabsoluteOffset = 0.543028101325035;//0.543028101325035;
+        public static final double BLabsoluteOffset = 1.922074042260647;//-1.228716127574444;
 
         public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
                 new Translation2d(frontBackWheels / 2, rightLeftWheels / 2),//Front-Left
@@ -70,7 +70,7 @@ public final class Constants {
         public static final double maxNeoRadPerSec = 2 * 2 * Math.PI;   
         public static final double wheelDiameter = 0.1016;//Units.inchesToMeters(4.0);
         public static final double mk4DriveGearRatio = 1 / 6.75;
-        public static final double mk3DriveGearRatio = 1 / 6.85; //8.16;
+        public static final double mk3DriveGearRatio = 1 / 6.86; //8.16;
         public static final double turnGearRatio = 1 / 12.8;
         public static final double mk3DriveEncoderToMeter = mk3DriveGearRatio * Math.PI * wheelDiameter;
         public static final double mk4DriveEncoderToMeter = mk4DriveGearRatio * Math.PI * wheelDiameter;
@@ -79,7 +79,7 @@ public final class Constants {
         public static final double mk4DriveEncoderRPMToMeterPerSec = mk4DriveEncoderToMeter / 60;
         public static final double turnEncoderRPMToRadPerSec = turnEncoderToRadian / 60;
 
-        public static final double PTurn = 0.5;
-        public static final double PDrive = 0.3;
+        public static final double PTurn = 0.35;
+        public static final double PDrive = 0.05;
     }
 }
