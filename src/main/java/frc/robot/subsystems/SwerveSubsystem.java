@@ -53,31 +53,33 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public SwerveSubsystem() {
         
-        //Creates a new thread, which sleeps and then zeros out the gyro
+        //Creates a new thread which zeros out the gyro and resets the encoders
         //Uses a new thread so that it doesn't pause all other code running
-        new Thread(() -> {
-            try {
-                Thread.sleep(1000);
-                zeroHeading();
-            } catch (Exception e) {
-            }
-        }).start();
         
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
                 resetEncoders();
+                zeroHeading();
             } catch (Exception e) {
             }
         }).start();
         
     }
 
+    /**
+     * Zeros the heading of the robot
+     */
     public void zeroHeading() {
         System.out.println("Zeroing gyro \n.\n.\n.\n.\n.\n.\n.");
         gyro.reset();
     }
 
+    /**
+     * Gets the heading of the robot
+     * 
+     * @return heading -returns the heading of the robot from the gyro
+     */
     public double getHeading() {
         return Math.IEEEremainder(gyro.getAngle(), 360);
     }
@@ -87,6 +89,10 @@ public class SwerveSubsystem extends SubsystemBase {
         //return Rotation2d.fromDegrees(getHeading());
     }
 
+    /**
+     * Resets the encoders for the 4 wheels
+     */
+
     public void resetEncoders() {
         frontLeft.resetEncoders();
         frontRight.resetEncoders();
@@ -94,6 +100,9 @@ public class SwerveSubsystem extends SubsystemBase {
         backLeft.resetEncoders();
     }
 
+    /**
+     * Puts encoder values and other data onto shuffleboard
+     */
     @Override
     public void periodic() {
         //Runs during robot periodic, displays shuffleboard data for this subsystem
@@ -109,6 +118,9 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Back Right", backRight.getTurnPosition());
     }
 
+    /**
+     * stops the 4 swerve modules
+     */
     public void stopModules() {
         frontLeft.stop();
         frontRight.stop();

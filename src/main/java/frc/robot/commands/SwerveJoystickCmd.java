@@ -16,6 +16,7 @@ import static frc.robot.utils.Constants.*;
 
 public class SwerveJoystickCmd extends CommandBase {
 
+  //Initializes the solenoids for the 6 cannons
   private final Solenoid valve1 = new Solenoid(PneumaticsModuleType.CTREPCM, Ports.cannon1);
   private final Solenoid valve2 = new Solenoid(PneumaticsModuleType.CTREPCM, Ports.cannon2);
   private final Solenoid valve3 = new Solenoid(PneumaticsModuleType.CTREPCM, Ports.cannon3);
@@ -61,6 +62,8 @@ public class SwerveJoystickCmd extends CommandBase {
     double ySpeed;
     double turningSpeed;
 
+    //These if-else statements should take care of any joystick drifting values
+    //There are also speed multipliers here
     if (Math.abs(xSpdFunction.get()) > 0.05){
       xSpeed = xSpdFunction.get() * -0.55;
     }
@@ -103,7 +106,9 @@ public class SwerveJoystickCmd extends CommandBase {
     }
 
     ChassisSpeeds chassisSpeeds;
-    if(false/*fieldOrientedFunction.get()*/) {
+    //Switches between field oriented and robot oriented
+    //Defintely not the best practice when it comes to programming 
+    if(True/*fieldOrientedFunction.get()*/) {
       //Field oriented mode
       chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
     }
@@ -116,6 +121,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
     swerveSubsystem.setModuleStates(moduleStates);
     
+    //These if-else statements determine if the valves on the solenoids should be opened or not
     if(valveOne.get()) {
       valve1.set(true);
     }

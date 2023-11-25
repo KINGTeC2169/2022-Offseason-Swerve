@@ -57,6 +57,8 @@ public class SwerveModule {
         //Configures integrated motor encoders
         driveEncoder = driveMotor.getEncoder();
         turnEncoder = neoTurn.getEncoder();
+
+        //extra stuff to compensate the different marks of swerve wheels
         if (isMK3) {
             driveEncoder.setPositionConversionFactor(mk3DriveEncoderToMeter);
             driveEncoder.setVelocityConversionFactor(mk3DriveEncoderRPMToMeterPerSec);
@@ -80,33 +82,59 @@ public class SwerveModule {
         resetEncoders();
     }
 
-    
+    /**
+     * Gets the drive position from the drive encoder
+     * 
+     * @return drivePosition -the position of the relative encoder
+     */
     public double getDrivePosition() {
         //>return driveMotor.getSelectedSensorPosition();
         return driveEncoder.getPosition();
     }
 
+    /**
+     * Gets the turn position from the turn encoder
+     * 
+     * @return turnPosition -the posiiton of the relative encoder
+     */
     public double getTurnPosition() {
         return turnEncoder.getPosition();
         //>return turnMotor.getSelectedSensorPosition();
     }
 
-    
+    /**
+     * Gets the velocity from he drive encoder
+     * 
+     * @return driveVelocity -returns the velocity from the relative encoder
+     */
     public double getDriveVelocity() {
         //>return driveMotor.getSelectedSensorVelocity();
         return driveEncoder.getVelocity();
     }
 
+    /**
+     * Gets the velocity from he turn encoder
+     * 
+     * @return turnVelocity -returns the velocity from the relative encoder
+     */
     public double getTurnVelocity() {
         return turnEncoder.getVelocity();
         //>return turnMotor.getSelectedSensorVelocity();
     }
 
+    /**
+     * Gets the absolute encoder value
+     * 
+     * @return absoluteTurnPosition -returns the position from the absolute encoder
+     */
     public double getAbsoluteTurnPosition() {
         return absoluteEncoder.getAbsolutePosition();
         //return 0; 
     }
 
+    /**
+     * Resets the drive encoders to position zero and the turn encoders to the value provided by the absolute encoder
+     */
     public void resetEncoders() {
         driveEncoder.setPosition(0);
         turnEncoder.setPosition(getAbsoluteTurnPosition());
@@ -130,6 +158,9 @@ public class SwerveModule {
         //>turnMotor.set(ControlMode.PercentOutput, turningPID.calculate(getTurnPosition(), state.angle.getRadians()));
     }
 
+    /**
+     * sets all motors to zero
+     */
     public void stop() {
         driveMotor.set(0);
         neoTurn.set(0);

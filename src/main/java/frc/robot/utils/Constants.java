@@ -22,9 +22,11 @@ public final class Constants {
     public static final boolean False = true;
 
     public static final class Ports {
+        //game controller should be in port one on the FRC driver station app
         public static final int controller = 0;
         public static final int joystick = 1;
 
+        //values for motor controllers and absolute encoders
         public static final int frontRightDrive = 8;
         public static final int frontRightTurn = 7;
         public static final int frontRightAbsolute = 12; 
@@ -38,6 +40,7 @@ public final class Constants {
         public static final int backLeftTurn = 2;
         public static final int backLeftAbsolute = 9;
 
+        //cannons
         public static final int cannon1 = 1;
         public static final int cannon2 = 2;
         public static final int cannon3 = 3;
@@ -52,8 +55,12 @@ public final class Constants {
         public static final double rightLeftWheels = Units.inchesToMeters(21.5);
         public static final double frontBackWheels = Units.inchesToMeters(21.5);
 
+        /*Absolute offset values
+        * These values may need to be updated from time to time
+        * They can be updated by setting them to 0, power cycling the robot, finding the correct values on shuffleboard, and putting them in here
+        */
         public static final double FRabsoluteOffset = -1.842307202517986;//-1.849977090954781;
-        public static final double FLabsoluteOffset = 0.998619474470615;//-1.402230476438999;
+        public static final double FLabsoluteOffset = 1.684307500720024;//-1.402230476438999;
         public static final double BRabsoluteOffset = 0.543028101325035;//0.543028101325035;
         public static final double BLabsoluteOffset = 1.922074042260647;//-1.228716127574444;
 
@@ -79,6 +86,7 @@ public final class Constants {
         public static final double mk4DriveEncoderRPMToMeterPerSec = mk4DriveEncoderToMeter / 60;
         public static final double turnEncoderRPMToRadPerSec = turnEncoderToRadian / 60;
 
+        //Used to tune the PID controllers (same for all the wheels)
         public static final double PTurn = 0.35;
         public static final double PDrive = 0.05;
     }
