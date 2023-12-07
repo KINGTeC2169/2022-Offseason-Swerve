@@ -4,9 +4,12 @@
 
 package frc.robot.utils;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.SPI;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -51,6 +54,10 @@ public final class Constants {
     }
 
     public static final class DriveConstants {
+
+        //Gyro
+        public static final AHRS gyro = new AHRS(SPI.Port.kMXP);
+
         //These will need to be in meters
         public static final double rightLeftWheels = Units.inchesToMeters(21.5);
         public static final double frontBackWheels = Units.inchesToMeters(21.5);
@@ -73,7 +80,6 @@ public final class Constants {
 
     public static final class ModuleConstants {
         public static final double maxNeoSpeed = 3.68808;
-        public static final double maxSpeed = 4.14528;
         public static final double maxNeoRadPerSec = 2 * 2 * Math.PI;   
         public static final double wheelDiameter = 0.1016;//Units.inchesToMeters(4.0);
         public static final double mk4DriveGearRatio = 1 / 6.75;

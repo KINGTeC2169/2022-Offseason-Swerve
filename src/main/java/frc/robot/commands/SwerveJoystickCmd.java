@@ -58,37 +58,12 @@ public class SwerveJoystickCmd extends CommandBase {
   @Override
   public void execute() {
 
-    double xSpeed;
-    double ySpeed;
-    double turningSpeed;
+    //TODO: Made some changes here, if there is a problem, its probably here...
+    double xSpeed = xSpdFunction.get();
+    double ySpeed = ySpdFunction.get();
+    double turningSpeed = -turningSpdFunction.get();
 
-    //These if-else statements should take care of any joystick drifting values
-    //There are also speed multipliers here
-    if (Math.abs(xSpdFunction.get()) > 0.05){
-      xSpeed = xSpdFunction.get() * -0.55;
-    }
-
-    else{
-      xSpeed = 0;
-    }
-
-    if (Math.abs(ySpdFunction.get()) > 0.05){
-      ySpeed = ySpdFunction.get() * -0.55;
-    }
-
-    else{
-      ySpeed = 0;
-    }
-
-    if (Math.abs(turningSpdFunction.get()) > 0.05){
-      turningSpeed = turningSpdFunction.get() * -0.4;
-    }
-
-    else{
-      turningSpeed = 0;
-    }
-
-    // Deadband: unsure if necessary for our controllers
+    //Creates a deadband for controllers
     xSpeed = Math.abs(xSpeed) > .05 ? xSpeed : 0.0;
     ySpeed = Math.abs(ySpeed) > .05 ? ySpeed : 0.0;
     turningSpeed = Math.abs(turningSpeed) > .02 ? turningSpeed : 0.0;
@@ -108,8 +83,9 @@ public class SwerveJoystickCmd extends CommandBase {
     ChassisSpeeds chassisSpeeds;
     //Switches between field oriented and robot oriented
     //Defintely not the best practice when it comes to programming 
-    if(True/*fieldOrientedFunction.get()*/) {
+    if(False/*fieldOrientedFunction.get()*/) {
       //Field oriented mode
+      System.out.println(swerveSubsystem.getRotation2d());
       chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
     }
     else {

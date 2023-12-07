@@ -2,16 +2,14 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants.DriveConstants;
 import static frc.robot.utils.Constants.ModuleConstants.*;
 
 import frc.robot.utils.Constants.Ports;
-
-import com.kauailabs.navx.frc.AHRS;
 
 public class SwerveSubsystem extends SubsystemBase {
     
@@ -47,9 +45,6 @@ public class SwerveSubsystem extends SubsystemBase {
     Ports.backRightAbsolute,
     DriveConstants.BRabsoluteOffset,
     false, true);
-    
-    //Creates an AHRS object to get inputs from the navX
-    private AHRS gyro = new AHRS(SPI.Port.kMXP);
 
     public SwerveSubsystem() {
         
@@ -72,7 +67,7 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public void zeroHeading() {
         System.out.println("Zeroing gyro \n.\n.\n.\n.\n.\n.\n.");
-        gyro.reset();
+        DriveConstants.gyro.reset();
     }
 
     /**
@@ -81,11 +76,11 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return heading -returns the heading of the robot from the gyro
      */
     public double getHeading() {
-        return Math.IEEEremainder(gyro.getAngle(), 360);
+        return Math.IEEEremainder(DriveConstants.gyro.getAngle(), 360);
     }
 
     public Rotation2d getRotation2d() {
-        return gyro.getRotation2d();
+        return DriveConstants.gyro.getRotation2d();
         //return Rotation2d.fromDegrees(getHeading());
     }
 
@@ -116,6 +111,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Front Right", frontRight.getTurnPosition());
         SmartDashboard.putNumber("Back Left", backLeft.getTurnPosition());
         SmartDashboard.putNumber("Back Right", backRight.getTurnPosition());
+
     }
 
     /**
@@ -126,6 +122,15 @@ public class SwerveSubsystem extends SubsystemBase {
         frontRight.stop();
         backLeft.stop();
         backRight.stop();
+    }
+
+    public SwerveModulePosition[] getModulePositions() {
+        return new SwerveModulePosition[] {
+        frontLeft.getModulePosition(),
+        frontRight.getModulePosition(),
+        backLeft.getModulePosition(),
+        backRight.getModulePosition()
+        };
     }
 
     /**Takes an array of SwerveModuleStates and sets each SwerveModule to its respective state */
