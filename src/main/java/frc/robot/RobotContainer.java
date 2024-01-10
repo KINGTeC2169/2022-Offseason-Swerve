@@ -8,12 +8,11 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.FollowAprilTagCmd;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.NavX;
-import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.LimelightTable;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.Constants.Ports;
 
@@ -29,7 +28,7 @@ public class RobotContainer {
 
   //These constructors display data to shuffleboard
   private final NavX navx = new NavX();
-  private final Limelight limelight = new Limelight();
+  private final LimelightTable limelight = new LimelightTable();
 
   //Follow AprilTag command
   private Command followAprilTag;
