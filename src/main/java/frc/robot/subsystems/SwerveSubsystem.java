@@ -2,16 +2,14 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.Constants.DriveConstants;
 import static frc.robot.utils.Constants.ModuleConstants.*;
 
 import frc.robot.utils.Constants.Ports;
-
-import com.kauailabs.navx.frc.AHRS;
 
 public class SwerveSubsystem extends SubsystemBase {
     
@@ -22,7 +20,7 @@ public class SwerveSubsystem extends SubsystemBase {
     true, false,
     Ports.frontLeftAbsolute,
     DriveConstants.FLabsoluteOffset,
-    false);
+    false, false);
 
     private SwerveModule frontRight = new SwerveModule(
     Ports.frontRightDrive,
@@ -30,7 +28,7 @@ public class SwerveSubsystem extends SubsystemBase {
     false, false,
     Ports.frontRightAbsolute,
     DriveConstants.FRabsoluteOffset,
-    false);
+    false, true);
 
     private SwerveModule backLeft = new SwerveModule(
     Ports.backLeftDrive,
@@ -38,7 +36,7 @@ public class SwerveSubsystem extends SubsystemBase {
     true, false,
     Ports.backLeftAbsolute,
     DriveConstants.BLabsoluteOffset,
-    false);
+    false, false);
 
     private SwerveModule backRight = new SwerveModule(
     Ports.backRightDrive,
@@ -46,18 +44,17 @@ public class SwerveSubsystem extends SubsystemBase {
     false, false,
     Ports.backRightAbsolute,
     DriveConstants.BRabsoluteOffset,
-    false);
-    
-    //Creates an AHRS object to get inputs from the navX
-    private AHRS gyro = new AHRS(SPI.Port.kMXP);
+    false, true);
 
     public SwerveSubsystem() {
         
-        //Creates a new thread, which sleeps and then zeros out the gyro
+        //Creates a new thread which zeros out the gyro and resets the encoders
         //Uses a new thread so that it doesn't pause all other code running
+        
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
+                resetEncoders();
                 zeroHeading();
             } catch (Exception e) {
             }
@@ -65,19 +62,31 @@ public class SwerveSubsystem extends SubsystemBase {
         
     }
 
+    /**
+     * Zeros the heading of the robot
+     */
     public void zeroHeading() {
         System.out.println("Zeroing gyro \n.\n.\n.\n.\n.\n.\n.");
-        gyro.reset();
+        Ports.gyro.reset();
     }
 
+    /**
+     * Gets the heading of the robot
+     * 
+     * @return heading -returns the heading of the robot from the gyro
+     */
     public double getHeading() {
-        return Math.IEEEremainder(gyro.getAngle(), 360);
+        return Math.IEEEremainder(Ports.gyro.getAngle(), 360);
     }
 
     public Rotation2d getRotation2d() {
-        return gyro.getRotation2d();
+        return Ports.gyro.getRotation2d();
         //return Rotation2d.fromDegrees(getHeading());
     }
+
+    /**
+     * Resets the encoders for the 4 wheels
+     */
 
     public void resetEncoders() {
         frontLeft.resetEncoders();
@@ -86,6 +95,9 @@ public class SwerveSubsystem extends SubsystemBase {
         backLeft.resetEncoders();
     }
 
+    /**
+     * Puts encoder values and other data onto shuffleboard
+     */
     @Override
     public void periodic() {
         //Runs during robot periodic, displays shuffleboard data for this subsystem
@@ -99,13 +111,26 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Front Right", frontRight.getTurnPosition());
         SmartDashboard.putNumber("Back Left", backLeft.getTurnPosition());
         SmartDashboard.putNumber("Back Right", backRight.getTurnPosition());
+
     }
 
+    /**
+     * stops the 4 swerve modules
+     */
     public void stopModules() {
         frontLeft.stop();
         frontRight.stop();
         backLeft.stop();
         backRight.stop();
+    }
+
+    public SwerveModulePosition[] getModulePositions() {
+        return new SwerveModulePosition[] {
+        frontLeft.getModulePosition(),
+        frontRight.getModulePosition(),
+        backLeft.getModulePosition(),
+        backRight.getModulePosition()
+        };
     }
 
     /**Takes an array of SwerveModuleStates and sets each SwerveModule to its respective state */

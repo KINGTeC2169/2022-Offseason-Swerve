@@ -5,12 +5,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import frc.robot.commands.FollowAprilTagCmd;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.subsystems.NavX;
+import frc.robot.subsystems.LimelightTable;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.Constants.Ports;
 
@@ -24,17 +26,27 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
+  //These constructors display data to shuffleboard
+  private final NavX navx = new NavX();
+  private final LimelightTable limelight = new LimelightTable();
+
+  //Follow AprilTag command
+  private Command followAprilTag;
+
   //private final Joystick driverJoystick = new Joystick(Ports.joystick);
-  private final XboxController controller = new XboxController(Ports.joystick);
+  private final XboxController controller = new XboxController(Ports.controller);
+  private final CommandJoystick moveStick = new CommandJoystick(Ports.moveStick);
+  private final CommandJoystick turnStick = new CommandJoystick(Ports.turnStick);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
           swerveSubsystem,
-          () -> controller.getLeftY(),
-          () -> controller.getLeftX(),
-          () -> controller.getRightX(),
-          () -> !controller.getAButtonPressed(), 
+          () -> moveStick.getX(),
+          () -> moveStick.getY(),
+          () -> turnStick.getTwist(),
+          () -> !controller.getAButtonPressed(),
+          () -> controller.getStartButtonPressed(),
           () -> controller.getYButton(),
           () -> controller.getBButton(),
           () -> controller.getAButton(),
@@ -44,6 +56,9 @@ public class RobotContainer {
           );
 
     configureButtonBindings();
+
+    followAprilTag = new FollowAprilTagCmd(swerveSubsystem);
+
   }
 
   /**
@@ -53,8 +68,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(controller, 7).whenPressed(() -> swerveSubsystem.zeroHeading());
-    new JoystickButton(controller, 8).whenPressed(() -> swerveSubsystem.resetEncoders());
+    // new JoystickButton(controller, 7).onTrue(swerveSubsystem.zeroHeading());
+    // new JoystickButton(controller, 8).onTrue(swerveSubsystem.resetEncoders());
     //new JoystickButton(controller, 2).whileActiveContinuous(() -> swerveSubsystem.setActiveStop());
   }
 
@@ -64,6 +79,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
+    return followAprilTag;
   }
 }
