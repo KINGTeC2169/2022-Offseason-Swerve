@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.commands.FollowAprilTagCmd;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.NavX;
@@ -35,14 +35,16 @@ public class RobotContainer {
 
   //private final Joystick driverJoystick = new Joystick(Ports.joystick);
   private final XboxController controller = new XboxController(Ports.controller);
+  private final CommandJoystick moveStick = new CommandJoystick(Ports.moveStick);
+  private final CommandJoystick turnStick = new CommandJoystick(Ports.turnStick);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
           swerveSubsystem,
-          () -> controller.getLeftY(),
-          () -> controller.getLeftX(),
-          () -> controller.getRightX(),
+          () -> moveStick.getX(),
+          () -> moveStick.getY(),
+          () -> turnStick.getTwist(),
           () -> !controller.getAButtonPressed(),
           () -> controller.getStartButtonPressed(),
           () -> controller.getYButton(),
@@ -66,8 +68,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(controller, 7).whenPressed(() -> swerveSubsystem.zeroHeading());
-    new JoystickButton(controller, 8).whenPressed(() -> swerveSubsystem.resetEncoders());
+    // new JoystickButton(controller, 7).onTrue(swerveSubsystem.zeroHeading());
+    // new JoystickButton(controller, 8).onTrue(swerveSubsystem.resetEncoders());
     //new JoystickButton(controller, 2).whileActiveContinuous(() -> swerveSubsystem.setActiveStop());
   }
 

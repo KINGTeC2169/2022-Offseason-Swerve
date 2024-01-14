@@ -6,9 +6,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 public class LimelightTable {
-    //This is a default array
-    //The default value will be -2169
-    private double[] arr = {-2169, -2169};
     private static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     private ShuffleboardTab tab = Shuffleboard.getTab("Limelight");
 

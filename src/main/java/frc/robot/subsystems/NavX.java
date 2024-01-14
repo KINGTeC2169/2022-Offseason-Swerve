@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.robot.utils.Constants.DriveConstants;
+import frc.robot.utils.Constants.Ports;
 
 public class NavX {
 
@@ -17,23 +17,23 @@ public class NavX {
     }
 
     public static double getX(){
-        return DriveConstants.gyro.getPitch();
+        return Ports.gyro.getPitch();
     }
 
     public static double getY(){
-        return DriveConstants.gyro.getRoll();
+        return Ports.gyro.getRoll();
     }
 
     public static double getZ(){
-        return DriveConstants.gyro.getYaw();
+        return Ports.gyro.getYaw();
     }
 
     public static double getAngle(){
-        return DriveConstants.gyro.getAngle();
+        return Ports.gyro.getAngle();
     }
 
     public static Rotation2d getCurrentRotation(){
-        return DriveConstants.gyro.getRotation2d();
+        return Ports.gyro.getRotation2d();
     }
     
 }

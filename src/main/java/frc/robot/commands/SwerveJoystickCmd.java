@@ -7,14 +7,14 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.utils.Constants.ModuleConstants;
 
 import frc.robot.utils.Constants.DriveConstants;
 import static frc.robot.utils.Constants.*;
 
-public class SwerveJoystickCmd extends CommandBase {
+public class SwerveJoystickCmd extends Command {
 
   //Initializes the solenoids for the 6 cannons
   private final Solenoid valve1 = new Solenoid(PneumaticsModuleType.CTREPCM, Ports.cannon1);
@@ -26,7 +26,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
   private final SwerveSubsystem swerveSubsystem;
   private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
-  private final Supplier<Boolean> fieldOrientedFunction, reset, valveOne, valveTwo, valveThree, valveFour, valveFive, valveSix;
+  private final Supplier<Boolean> reset, valveOne, valveTwo, valveThree, valveFour, valveFive, valveSix;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
   public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem, Supplier<Double> xSpdFunction, 
@@ -37,7 +37,6 @@ public class SwerveJoystickCmd extends CommandBase {
     this.xSpdFunction = xSpdFunction;
     this.ySpdFunction = ySpdFunction;
     this.turningSpdFunction = turningSpdFunction;
-    this.fieldOrientedFunction = fieldOrientedFunction;
     this.reset = reset;
     this.valveOne = valveOne;
     this.valveTwo = valveTwo;
@@ -58,7 +57,6 @@ public class SwerveJoystickCmd extends CommandBase {
   @Override
   public void execute() {
 
-    //TODO: Made some changes here, if there is a problem, its probably here...
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();
     double turningSpeed = -turningSpdFunction.get();

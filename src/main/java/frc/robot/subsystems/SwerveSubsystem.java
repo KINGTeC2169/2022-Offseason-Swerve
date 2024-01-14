@@ -67,7 +67,7 @@ public class SwerveSubsystem extends SubsystemBase {
      */
     public void zeroHeading() {
         System.out.println("Zeroing gyro \n.\n.\n.\n.\n.\n.\n.");
-        DriveConstants.gyro.reset();
+        Ports.gyro.reset();
     }
 
     /**
@@ -76,11 +76,11 @@ public class SwerveSubsystem extends SubsystemBase {
      * @return heading -returns the heading of the robot from the gyro
      */
     public double getHeading() {
-        return Math.IEEEremainder(DriveConstants.gyro.getAngle(), 360);
+        return Math.IEEEremainder(Ports.gyro.getAngle(), 360);
     }
 
     public Rotation2d getRotation2d() {
-        return DriveConstants.gyro.getRotation2d();
+        return Ports.gyro.getRotation2d();
         //return Rotation2d.fromDegrees(getHeading());
     }
 

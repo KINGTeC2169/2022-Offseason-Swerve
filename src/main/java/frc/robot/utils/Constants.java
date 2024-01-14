@@ -27,7 +27,8 @@ public final class Constants {
     public static final class Ports {
         //game controller should be in port one on the FRC driver station app
         public static final int controller = 0;
-        public static final int joystick = 1;
+        public static final int moveStick = 1;
+        public static final int turnStick = 2;
 
         //values for motor controllers and absolute encoders
         public static final int frontRightDrive = 8;
@@ -51,12 +52,12 @@ public final class Constants {
         public static final int cannon5 = 5;
         public static final int cannon6 = 6;
 
+        //Gyro
+        public static final AHRS gyro = new AHRS(SPI.Port.kMXP);
+
     }
 
     public static final class DriveConstants {
-
-        //Gyro
-        public static final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
         //These will need to be in meters
         public static final double rightLeftWheels = Units.inchesToMeters(21.5);
@@ -66,10 +67,10 @@ public final class Constants {
         * These values may need to be updated from time to time
         * They can be updated by setting them to 0, power cycling the robot, finding the correct values on shuffleboard, and putting them in here
         */
-        public static final double FRabsoluteOffset = -1.842307202517986;//-1.849977090954781;
-        public static final double FLabsoluteOffset = 1.684307500720024;//-1.402230476438999;
-        public static final double BRabsoluteOffset = 0.543028101325035;//0.543028101325035;
-        public static final double BLabsoluteOffset = 1.922074042260647;//-1.228716127574444;
+        public static final double FRabsoluteOffset = -1.842307202517986; //-1.849977090954781;
+        public static final double FLabsoluteOffset = 1.684307500720024; //-1.402230476438999;
+        public static final double BRabsoluteOffset = 0.543028101325035; //0.543028101325035;
+        public static final double BLabsoluteOffset = 1.922074042260647; //-1.228716127574444;
 
         public static final SwerveDriveKinematics DRIVE_KINEMATICS = new SwerveDriveKinematics(
                 new Translation2d(frontBackWheels / 2, rightLeftWheels / 2),//Front-Left
