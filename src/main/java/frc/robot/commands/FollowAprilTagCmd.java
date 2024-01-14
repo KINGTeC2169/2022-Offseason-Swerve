@@ -11,7 +11,6 @@ import frc.robot.utils.Constants.DriveConstants;
 public class FollowAprilTagCmd extends Command{    
     
     private SwerveSubsystem swerveSubsystem;
-
     private ChassisSpeeds chassisSpeeds;
     private double turningSpeed;
     private PIDController xController;
