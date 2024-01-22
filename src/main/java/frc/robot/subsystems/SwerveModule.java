@@ -36,11 +36,7 @@ public class SwerveModule {
         driveMotor.setInverted(driveMotorReversed);
 
         //Configuration for CANCoder
-        configTest.MagnetSensor.MagnetOffset = Units.radiansToDegrees(absoluteOffset);    
-        // configTest.MagnetSensor.sensorCoefficient = 2 * Math.PI / 4096.0;
-        // configTest.MagnetSensor.UnitString = "rad";
-        // configTest.MagnetSensor.SensorTimeBase = SensorTimeBase.PerSecond;
-        // configTest.MagnetSensor.SensorDirection = isCancoderReversed;
+        configTest.MagnetSensor.MagnetOffset = Units.radiansToRotations(absoluteOffset);    
 
         absoluteEncoder = new CANcoder(canCoderID);
         absoluteEncoder.getConfigurator().apply(configTest);
@@ -147,7 +143,8 @@ public class SwerveModule {
         }
         state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(state.speedMetersPerSecond / maxNeoSpeed);
-        neoTurn.set(turningPID.calculate(getTurnPosition(), state.angle.getRadians()));    }
+        neoTurn.set(turningPID.calculate(getTurnPosition(), state.angle.getRadians()));    
+    }
 
     /**
      * sets all motors to zero
