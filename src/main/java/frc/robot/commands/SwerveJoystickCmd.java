@@ -81,7 +81,7 @@ public class SwerveJoystickCmd extends Command {
     ChassisSpeeds chassisSpeeds;
     //Switches between field oriented and robot oriented
     //Defintely not the best practice when it comes to programming 
-    if(False/*fieldOrientedFunction.get()*/) {
+    if(True/*fieldOrientedFunction.get()*/) {
       //Field oriented mode
       System.out.println(swerveSubsystem.getRotation2d());
       chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());

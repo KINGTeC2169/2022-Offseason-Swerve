@@ -42,8 +42,8 @@ public class RobotContainer {
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
           swerveSubsystem,
-          () -> moveStick.getX(),
           () -> moveStick.getY(),
+          () -> moveStick.getX(),
           () -> turnStick.getTwist(),
           () -> !controller.getAButtonPressed(),
           () -> controller.getStartButtonPressed(),
