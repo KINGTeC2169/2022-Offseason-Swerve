@@ -1,7 +1,8 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -11,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+
 import static frc.robot.utils.Constants.ModuleConstants.*;
 
 public class SwerveModule {
@@ -23,7 +25,7 @@ public class SwerveModule {
 
     private PIDController drivePID;
     private PIDController turningPID;
-    private CANcoderConfiguration configTest = new CANcoderConfiguration();
+    private MagnetSensorConfigs absoluteConfig = new MagnetSensorConfigs();
 
     public SwerveModule(int driveMotorID, int turnMotorID, boolean driveMotorReversed, 
                 boolean turnMotorReversed, int canCoderID, double absoluteOffset, 
@@ -36,10 +38,16 @@ public class SwerveModule {
         driveMotor.setInverted(driveMotorReversed);
 
         //Configuration for CANCoder
-        configTest.MagnetSensor.MagnetOffset = Units.radiansToRotations(absoluteOffset);    
+        absoluteConfig.withMagnetOffset(absoluteOffset);   
+        if (isCancoderReversed) {
+            absoluteConfig.withSensorDirection(SensorDirectionValue.Clockwise_Positive);
+        }
+        else {
+            absoluteConfig.withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
+        }
 
         absoluteEncoder = new CANcoder(canCoderID);
-        absoluteEncoder.getConfigurator().apply(configTest);
+        absoluteEncoder.getConfigurator().apply(absoluteConfig);
 
         //Configures integrated motor encoders
         driveEncoder = driveMotor.getEncoder();
@@ -88,10 +96,10 @@ public class SwerveModule {
     /**
      * Gets the turn position from the turn encoder
      * 
-     * @return turnPosition -the posiiton of the relative encoder
+     * @return turnPosition -the posiiton of the relative encoder in radians
      */
     public double getTurnPosition() {
-        return turnEncoder.getPosition();
+        return Units.rotationsToRadians(turnEncoder.getPosition());
     }
 
     /**
