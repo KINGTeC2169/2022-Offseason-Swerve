@@ -17,7 +17,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private SwerveModule frontLeft = new SwerveModule(
     Ports.frontLeftDrive,
     Ports.frontLeftTurn, 
-    true, false,
+    false, false,
     Ports.frontLeftAbsolute,
     DriveConstants.FLabsoluteOffset,
     false, false);
@@ -33,7 +33,7 @@ public class SwerveSubsystem extends SubsystemBase {
     private SwerveModule backLeft = new SwerveModule(
     Ports.backLeftDrive,
     Ports.backLeftTurn, 
-    true, false,
+    false, false,
     Ports.backLeftAbsolute,
     DriveConstants.BLabsoluteOffset,
     false, false);
