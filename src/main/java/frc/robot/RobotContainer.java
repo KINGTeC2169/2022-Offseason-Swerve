@@ -35,16 +35,16 @@ public class RobotContainer {
 
   //private final Joystick driverJoystick = new Joystick(Ports.joystick);
   private final XboxController controller = new XboxController(Ports.controller);
-  private final CommandJoystick moveStick = new CommandJoystick(Ports.moveStick);
-  private final CommandJoystick turnStick = new CommandJoystick(Ports.turnStick);
+  //private final CommandJoystick moveStick = new CommandJoystick(Ports.moveStick);
+  //private final CommandJoystick turnStick = new CommandJoystick(Ports.turnStick);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
           swerveSubsystem,
-          () -> moveStick.getY(),
-          () -> moveStick.getX(),
-          () -> turnStick.getTwist(),
+          () -> controller.getLeftY(),
+          () -> controller.getLeftX(),
+          () -> controller.getRightX(),
           () -> !controller.getAButtonPressed(),
           () -> controller.getStartButtonPressed(),
           () -> controller.getYButton(),
