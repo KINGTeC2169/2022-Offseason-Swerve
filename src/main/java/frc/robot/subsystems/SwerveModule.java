@@ -1,8 +1,9 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.signals.SensorDirectionValue;
-import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
+import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.SensorTimeBase;
+import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -18,14 +19,14 @@ import static frc.robot.utils.Constants.ModuleConstants.*;
 public class SwerveModule {
     private CANSparkMax driveMotor;
     private CANSparkMax neoTurn;
-    private CANcoder absoluteEncoder;
+    private CANCoder absoluteEncoder;
 
     private final RelativeEncoder driveEncoder;
     private final RelativeEncoder turnEncoder;
 
     private PIDController drivePID;
     private PIDController turningPID;
-    private MagnetSensorConfigs absoluteConfig = new MagnetSensorConfigs();
+    private CANCoderConfiguration config = new CANCoderConfiguration();
 
     public SwerveModule(int driveMotorID, int turnMotorID, boolean driveMotorReversed, 
                 boolean turnMotorReversed, int canCoderID, double absoluteOffset, 
@@ -38,16 +39,15 @@ public class SwerveModule {
         driveMotor.setInverted(driveMotorReversed);
 
         //Configuration for CANCoder
-        absoluteConfig.withMagnetOffset(absoluteOffset);   
-        if (isCancoderReversed) {
-            absoluteConfig.withSensorDirection(SensorDirectionValue.Clockwise_Positive);
-        }
-        else {
-            absoluteConfig.withSensorDirection(SensorDirectionValue.CounterClockwise_Positive);
-        }
+        config.magnetOffsetDegrees = Units.radiansToDegrees(absoluteOffset);
+        config.sensorCoefficient = 2 * Math.PI / 4096.0;
+        config.unitString = "rad";
+        config.sensorTimeBase = SensorTimeBase.PerSecond;
+        config.sensorDirection = isCancoderReversed;
+        config.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180;
 
-        absoluteEncoder = new CANcoder(canCoderID);
-        absoluteEncoder.getConfigurator().apply(absoluteConfig);
+        absoluteEncoder = new CANCoder(canCoderID);
+        absoluteEncoder.configAllSettings(config);
 
         //Configures integrated motor encoders
         driveEncoder = driveMotor.getEncoder();
@@ -126,7 +126,7 @@ public class SwerveModule {
      * @return absoluteTurnPosition -returns the position from the absolute encoder
      */
     public double getAbsoluteTurnPosition() {
-        return absoluteEncoder.getAbsolutePosition().getValue();
+        return absoluteEncoder.getAbsolutePosition();
         //return 0; 
     }
 
